@@ -28,7 +28,7 @@ public:
 		nhPriv.param<double>("wait_before_hand_active", temp, 1.0);
 		_waitBeforeHandActive = ros::Duration(temp);
 
-		nhPriv.param<double>("controller_radius", _workspaceHandRadius, 0.1);
+		nhPriv.param<double>("controller_radius", _workspaceHandRadius, 0.2);
 		nhPriv.param<double>("controller_inner_radius", _workspaceHandInnerRadius, 0.03);
 		nhPriv.param<double>("gripper_control_threshold", _gripperControlThreshold, 0.06);
 
