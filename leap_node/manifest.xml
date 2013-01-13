@@ -1,0 +1,16 @@
+<package>
+  <description brief="leap_node">
+
+     leap_node
+
+  </description>
+  <author>Kai Franke</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/leap_node</url>
+  <depend package="geometry_msgs"/>
+  <depend package="leap_msgs"/>
+
+</package>
+
+
