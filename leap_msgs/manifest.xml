@@ -1,0 +1,16 @@
+<package>
+  <description brief="leap_msgs">
+
+     leap_msgs
+
+  </description>
+  <author>Nikolaus Demmel</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/leap_msgs</url>
+  <depend package="std_msgs" />
+  <depend package="geometry_msgs" />
+
+</package>
+
+
