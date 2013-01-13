@@ -11,6 +11,7 @@
   <depend package="pr2_teleop_general"/>
   <depend package="roscpp"/>
   <depend package="geometry_msgs"/>
+  <depend package="simple_robot_control"/>
 </package>
 
 
