@@ -18,45 +18,73 @@ public:
 		_workspaceOrigin(0,0,0.3)
 	{
 		_handEnteredWorkspaceTimestamp = ros::Time(0);
-		_subLeap = _nh.subscribe("leap", 10, &GestureInterpreter::leap_cb, this);
+		_subLeap = _nh.subscribe("leap", 10, &GestureInterpreter::leapCB, this);
+		_pubControl = _nh.advertise<geometry_msgs::PoseStamped>("leap/palm/pose", 10, true);
+		_waitBeforeHandActive = ros::Duration(2.0);
+
 	}
 
-	void leap_cb(const leap_msgs::Leap &msg)
+	void leapCB(const leap_msgs::Leap &msg)
 	{
+		// use first hand in workspace
+
 		BOOST_FOREACH(const leap_msgs::Hand &hand, msg.hands)
 		{
-			if(in_workspace(hand))
+			if(inWorkspace(hand))
 			{
 				// this is the controlling hand
 
-				if(!_handInLastFrame)
-				{
-					_handInLastFrame = true;
+				frameHasHand();
 
+				if(handActive())
+				{
+					// do control with hand
+
+					tf::Point hand_point;
+					tf::pointMsgToTF(hand.pose.position, hand_point);
+
+					tf::Point relative_hand_point = hand_point - _workspaceOrigin;
+
+					tf::pointTFToMsg(relative_hand_point, _controlPose.position);
+					_controlPose.orientation = hand.pose.orientation;
 				}
-
-				if()
+				else
 				{
-					// start control with hand
+					resetControlPose();
 				}
 			}
 		}
 
 		// no hand found
+		frameHasNoHand();
 	}
 
-	bool frameHasHand()
+	void resetControlPose()
 	{
+		_controlPose = geometry_msgs::Pose();
+	}
 
+	void frameHasHand()
+	{
+		if(_handEnteredWorkspaceTimestamp.isZero())
+		{
+			_handEnteredWorkspaceTimestamp = ros::Time::now();
+		}
+	}
+
+	void frameHasNoHand()
+	{
+		_handEnteredWorkspaceTimestamp = ros::Time(0);
+		resetControlPose();
 	}
 
 	bool handActive()
 	{
 		return (!_handEnteredWorkspaceTimestamp.isZero()) &&
-				(ros::Time::now() - _handEnteredWorkspaceTimestamp) > ros::Duration(2.0);
+				(ros::Time::now() - _handEnteredWorkspaceTimestamp) > _waitBeforeHandActive;
 	}
 
-	bool in_workspace(const leap_msgs::Hand &hand)
+	bool inWorkspace(const leap_msgs::Hand &hand)
 	{
 		tf::Point hand_point;
 		tf::pointMsgToTF(hand.pose.position, hand_point);
@@ -65,18 +93,35 @@ public:
 
 	void run()
 	{
-		ros::spin();
+		ros::Rate r(ros::Duration(0.01));
+		while(ros::ok())
+		{
+			ros::spinOnce();
+
+			geometry_msgs::PoseStamped msg;
+			msg.header.frame_id = "leap_control_link";
+			msg.header.stamp = ros::Time::now();
+			msg.pose = _controlPose;
+			_pubControl.publish(msg);
+
+			r.sleep();
+		}
 	}
 
 private:
 	ros::NodeHandle _nh;
 
 	ros::Subscriber _subLeap;
+	ros::Publisher _pubControl;
 
 	tf::Point _workspaceOrigin;
 
 	// zero if last frame had no hand in workspace
 	ros::Time _handEnteredWorkspaceTimestamp;
+
+	geometry_msgs::Pose _controlPose;
+
+	ros::Duration _waitBeforeHandActive;
 };
 
 
