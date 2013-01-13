@@ -1,0 +1,16 @@
+<package>
+  <description brief="pr2_teleop_leap">
+
+     pr2_teleop_leap
+
+  </description>
+  <author>Kai Franke</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/pr2_teleop_leap</url>
+  <depend package="pr2_teleop_general"/>
+  <depend package="roscpp"/>
+  <depend package="geometry_msgs"/>
+</package>
+
+
