@@ -9,6 +9,10 @@
   <review status="unreviewed" notes=""/>
   <url>http://ros.org/wiki/leap_gestures</url>
 
+  <depend package="roscpp"/>
+  <depend package="leap_msgs"/>
+  <depend package="tf" />
+
 </package>
 
 
