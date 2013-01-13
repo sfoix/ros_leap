@@ -13,7 +13,7 @@ void chatterCallback(const geometry_msgs::TwistConstPtr& msg)
 
 int main(int argc, char **argv)
 {
-  ros::init(argc, argv, "twist_listener");
+  ros::init(argc, argv, "leap_velocity_driver");
   ros::NodeHandle n;
   gc = new GeneralCommander(false, false, true, false, false);
   ros::Subscriber sub = n.subscribe("/leap/pr2hand/twist",10,chatterCallback);
