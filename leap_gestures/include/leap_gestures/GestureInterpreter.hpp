@@ -14,14 +14,26 @@ class GestureInterpreter
 {
 public:
 	GestureInterpreter(ros::NodeHandle nh):
-		_nh(nh),
-		_workspaceOrigin(0,0,0.3)
+		_nh(nh)
 	{
 		_handEnteredWorkspaceTimestamp = ros::Time(0);
+
+		double temp;
+
+		ros::NodeHandle nhPriv("~");
+
+		nhPriv.param<double>("wait_before_hand_active", temp, 2.0);
+		_waitBeforeHandActive = ros::Duration(temp);
+
+		nhPriv.param<double>("workspace_origin/x", temp, 0);
+		_workspaceOrigin.setX(temp);
+		nhPriv.param<double>("workspace_origin/y", temp, 0);
+		_workspaceOrigin.setX(temp);
+		nhPriv.param<double>("workspace_origin/z", temp, 0.3);
+		_workspaceOrigin.setX(temp);
+
 		_subLeap = _nh.subscribe("leap", 10, &GestureInterpreter::leapCB, this);
 		_pubControl = _nh.advertise<geometry_msgs::PoseStamped>("leap/palm/pose", 10, true);
-		_waitBeforeHandActive = ros::Duration(2.0);
-
 	}
 
 	void leapCB(const leap_msgs::Leap &msg)

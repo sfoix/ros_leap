@@ -1,0 +1,8 @@
+<launch>
+  <node pkg="leap_gestures" type="leap_gesture_interpreter" name="leap_gesture_interpreter">
+	<param name="wait_before_hand_active" value="2.0"/>
+	<param name="workspace_origin/x" value="0"/>
+	<param name="workspace_origin/y" value="0"/>
+	<param name="workspace_origin/z" value="0.3"/>
+  </node>
+</launch>
