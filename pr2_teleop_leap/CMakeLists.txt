@@ -28,3 +28,6 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 #rosbuild_link_boost(${PROJECT_NAME} thread)
 rosbuild_add_executable(pr2_teleop_leap_node src/pr2_teleop_leap_node.cpp)
 target_link_libraries(pr2_teleop_leap_node pr2_teleop_general_commander)
+rosbuild_add_executable(gripper_node src/gripper.cpp)
+target_link_libraries(gripper_node pr2_teleop_general_commander)
+
