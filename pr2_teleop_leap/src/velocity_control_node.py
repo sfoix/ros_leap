@@ -20,10 +20,10 @@ def callback(msg):
 	tw.linear.y =  msg.pose.position.y * multiplier
 	tw.linear.z =  msg.pose.position.z * multiplier
         (r, p, y) = tf.transformations.euler_from_quaternion([msg.pose.orientation.x, msg.pose.orientation.y, msg.pose.orientation.z, msg.pose.orientation.w])
-        tw.angular.x = r
+        tw.angular.x = r * 10
 	pub.publish(tw)
-	#print(tw)
-	print("Hand Pose \n", msg)
+	print("Twist", tw)
+	#print("Hand Pose", msg)
 	marker = Marker()
 	marker.header.frame_id = "base_link"
 	marker.header.stamp = rospy.Time.now()
