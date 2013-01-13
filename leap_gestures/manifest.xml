@@ -1,0 +1,14 @@
+<package>
+  <description brief="leap_gestures">
+
+     leap_gestures
+
+  </description>
+  <author>Nikolaus Demmel</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/leap_gestures</url>
+
+</package>
+
+
