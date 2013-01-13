@@ -1,4 +1,4 @@
-std_msgs/Int16 id
+int16 id
 geometry_msgs/Pose pose
-std_msgs/Int16[] finger_ids
-std_msgs/Int16[] tool_ids
+int16[] finger_ids
+int16[] tool_ids
