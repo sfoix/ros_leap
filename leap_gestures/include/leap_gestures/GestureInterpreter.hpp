@@ -48,9 +48,9 @@ public:
 		ROS_INFO_STREAM("Gesture Interpreter config: reset_to_zero = " << _resetToZero);
 
 
-		nhPriv.param<double>("scale_roll", _scaleRoll, 2.5);
+		nhPriv.param<double>("scale_roll", _scaleRoll, 1.0);
 		ROS_INFO_STREAM("Gesture Interpreter config: scale_roll = " << _scaleRoll);
-		nhPriv.param<double>("scale_pitch", _scalePitch, 2.0);
+		nhPriv.param<double>("scale_pitch", _scalePitch, 1.0);
 		ROS_INFO_STREAM("Gesture Interpreter config: scale_pitch = " << _scalePitch);
 		nhPriv.param<double>("scale_yaw", _scaleYaw, 1.0);
 		ROS_INFO_STREAM("Gesture Interpreter config: scale_yaw = " << _scaleYaw);
@@ -100,9 +100,11 @@ public:
 					tf::Quaternion hand_orientation;
 					tf::quaternionMsgToTF(hand.pose.orientation, hand_orientation);
 
+
+					// FIXME: Scaling does not quite work. We need roll and pitch in hand frame.
 					double roll, pitch, yaw;
 					tf::Matrix3x3(hand_orientation).getEulerYPR(yaw, pitch, roll);
-					roll *= _scaleRoll;
+					roll *= _scaleRoll ;
 					pitch *= _scalePitch;
 					yaw *= _scaleYaw;
 					tf::Matrix3x3 oriMat;
@@ -125,6 +127,9 @@ public:
 					///////////////////////////////////
 
 #ifdef NOT_DEFINED
+
+					// FIXME: This distance based gripper control does not work yet.
+
 					BOOST_FOREACH(const int16_t & finger_id, hand.finger_ids)
 					{
 						leap_msgs::Finger finger;
@@ -165,6 +170,9 @@ public:
 						}
 					}
 #endif
+
+					// Simple count based control
+
 					if(hand.finger_ids.size() >= 3)
 					{
 //						ROS_INFO("Open");
@@ -301,12 +309,9 @@ private:
 	ros::Publisher _pubStatus;
 
 	tf::Point _workspaceHand;
-//	tf::Point _workspaceGripper;
 	double _workspaceHandRadius;
 	double _workspaceHandInnerRadius;
-//	double _workspaceGripperRadius;
 	bool _workspaceHandActive;
-//	bool _workspaceGripperActive;
 
 	geometry_msgs::Pose _controlHandPose; // pose sent to the controller. 0 if not active
 	leap_msgs::GripperControl _gripperControl;

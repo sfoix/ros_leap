@@ -1,4 +1,5 @@
 <launch>
+
   <node pkg="leap_gestures" type="leap_gesture_interpreter" name="leap_gesture_interpreter"
         output="screen">
 	<param name="wait_before_hand_active" value="0.5"/>
@@ -12,16 +13,19 @@
 	<param name="square_workspace" value="true"/> <!-- false = sperical -->
 	<param name="reset_to_zero" value="false"/> <!-- false = if we loose tracking, don't return to 0 pose -->
 
+	<!-- unused in current count based implementation -->
 	<param name="gripper_control_threshold" value="0.06"/>
+
 	<param name="gripper_control_enabled" value="true"/>
 
         
 	<!-- SCALING NOT WORKING -->
 	<!--<param name="scale_roll" value="2.5"/>-->
-        <!--<param name="scale_pitch" value="2.0"/>-->
-        <!--<param name="scale_yaw" value="1.0"/>-->
+	<!--<param name="scale_pitch" value="2.0"/>-->
+	<!--<param name="scale_yaw" value="1.0"/>-->
 
   </node>
+
 
   <node pkg="pr2_teleop_leap" type="pose_control_node.py" name="pose_control_node"
         output="screen"/>
@@ -30,5 +34,6 @@
 
 
   <include file="$(find simple_robot_control)/launch/simple_robot_control_without_collision_checking.launch"/>
+
 
 </launch>
