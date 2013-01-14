@@ -104,6 +104,7 @@ public:
 					// Check fingers for gripper control
 					///////////////////////////////////
 
+#ifdef NOT_DEFINED
 					BOOST_FOREACH(const int16_t & finger_id, hand.finger_ids)
 					{
 						leap_msgs::Finger finger;
@@ -142,6 +143,17 @@ public:
 							ROS_INFO("Close");
 							_gripperControl.open = false;
 						}
+					}
+#endif
+					if(hand.finger_ids.size() >= 5)
+					{
+						ROS_INFO("Open");
+						_gripperControl.open = true;
+					}
+					else
+					{
+						ROS_INFO("Close");
+						_gripperControl.open = false;
 					}
 
 				}
