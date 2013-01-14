@@ -27,13 +27,25 @@ public:
 
 		nhPriv.param<double>("wait_before_hand_active", temp, 1.0);
 		_waitBeforeHandActive = ros::Duration(temp);
+		ROS_INFO_STREAM("Gesture Interpreter config: wait_before_hand_active = " << temp);
 
-		nhPriv.param<double>("controller_radius", _workspaceHandRadius, 0.2);
-		nhPriv.param<double>("controller_inner_radius", _workspaceHandInnerRadius, 0.03);
+		nhPriv.param<double>("workspace_radius", _workspaceHandRadius, 0.2);
+		ROS_INFO_STREAM("Gesture Interpreter config: workspace_radius = " << _workspaceHandRadius);
+
+		nhPriv.param<double>("workspace_inner_radius", _workspaceHandInnerRadius, 0.03);
+		ROS_INFO_STREAM("Gesture Interpreter config: workspace_inner_radius = " << _workspaceHandInnerRadius);
+
 		nhPriv.param<bool>("gripper_control_enabled", _gripperControlEnabled, true);
+		ROS_INFO_STREAM("Gesture Interpreter config: gripper_control_enabled = " << _gripperControlEnabled);
+
 		nhPriv.param<double>("gripper_control_threshold", _gripperControlThreshold, 0.06);
+		ROS_INFO_STREAM("Gesture Interpreter config: gripper_control_threshold = " << _gripperControlThreshold);
+
 		nhPriv.param<bool>("square_workspace", _squareWorkspace, false);
+		ROS_INFO_STREAM("Gesture Interpreter config: square_workspace = " << _squareWorkspace);
+
 		nhPriv.param<bool>("reset_to_zero", _resetToZero, true);
+		ROS_INFO_STREAM("Gesture Interpreter config: reset_to_zero = " << _resetToZero);
 
 
 		nhPriv.param<double>("workspace_origin/x", temp, 0);
@@ -42,6 +54,8 @@ public:
 		_workspaceHand.setY(temp);
 		nhPriv.param<double>("workspace_origin/z", temp, 0.3);
 		_workspaceHand.setZ(temp);
+		ROS_INFO("Gesture Interpreter config: workspace_origin = (%f,%f,%f)",
+				 _workspaceHand.x(), _workspaceHand.y(), _workspaceHand.z());
 
 		_subLeap = _nh.subscribe("leap/data", 10, &GestureInterpreter::leapCB, this);
 		_pubControlHand = _nh.advertise<geometry_msgs::PoseStamped>("leap/palm/pose", 1, true);
