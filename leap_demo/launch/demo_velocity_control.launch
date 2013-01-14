@@ -13,6 +13,6 @@
 	<param name="reset_to_zero" value="true"/> <!-- false = if we loose tracking, don't return to 0 pose -->
 
 	<param name="gripper_control_threshold" value="0.06"/>
-	<param name="gripper_control_enabled" value="false"/>
+	<param name="gripper_control_enabled" value="true"/>
   </node>
 </launch>

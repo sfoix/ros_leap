@@ -13,7 +13,7 @@
 	<param name="reset_to_zero" value="false"/> <!-- false = if we loose tracking, don't return to 0 pose -->
 
 	<param name="gripper_control_threshold" value="0.06"/>
-	<param name="gripper_control_enabled" value="false"/>
+	<param name="gripper_control_enabled" value="true"/>
   </node>
 
   <node pkg="pr2_teleop_leap" type="pose_control_node.py" name="pose_control_node"
