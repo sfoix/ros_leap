@@ -145,7 +145,7 @@ public:
 						}
 					}
 #endif
-					if(hand.finger_ids.size() >= 5)
+					if(hand.finger_ids.size() >= 3)
 					{
 						ROS_INFO("Open");
 						_gripperControl.open = true;
