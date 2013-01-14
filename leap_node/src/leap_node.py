@@ -94,7 +94,7 @@ def leap_node():
             tools_msg.width = tool.width
             msg.tools.append(tools_msg)
         pub.publish(msg)
-        rospy.sleep(0.01)
+        rospy.sleep(0.05)
 
 
 if __name__ == '__main__':

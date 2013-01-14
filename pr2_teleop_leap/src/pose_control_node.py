@@ -13,14 +13,14 @@ pub_marker2 = rospy.Publisher('/leap/pr2hand/workspace', Marker)
 
 rospy.init_node('leap_pose_control')
 armr = simple_robot_control.Arm('r')
-multiplier = 2.0
+multiplier = 1.8
 offset = [0.553, 0.013, 1.0]
 
 def callback(msg):
 	#ospy.loginfo("I received a message! w00t")
 	x = (msg.pose.position.x * multiplier) + 0.55
 	y = msg.pose.position.y * multiplier - 0.2
-	z = msg.pose.position.z * multiplier - 0.1
+	z = msg.pose.position.z * multiplier + 0.05
 	#armr = simple_robot_control.Arm('r')
 	armr.goToPose([x,y,z],[msg.pose.orientation.x,msg.pose.orientation.y,msg.pose.orientation.z,msg.pose.orientation.w ], 'torso_lift_link', 0.5,False)
 	marker = Marker()
@@ -51,7 +51,7 @@ def callback(msg):
         marker2.header.stamp = rospy.Time.now()
         marker2.ns = "my_namespace"
         marker2.id = 0
-        marker2.type = marker.SPHERE
+        marker2.type = marker.CUBE
         marker2.action = marker.ADD
         marker2.pose.position.x = offset[0]
         marker2.pose.position.y = offset[1]
@@ -60,9 +60,9 @@ def callback(msg):
         marker2.pose.orientation.y = 0
         marker2.pose.orientation.z = 0
         marker2.pose.orientation.w = 1
-        marker2.scale.x = 0.3
-        marker2.scale.y = 0.3
-        marker2.scale.z = 0.3
+        marker2.scale.x = 0.4
+        marker2.scale.y = 0.4
+        marker2.scale.z = 0.4
         marker2.color.a = 0.5
         marker2.color.r = 0.0
         marker2.color.g = 0.0
