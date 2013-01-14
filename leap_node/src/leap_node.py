@@ -19,8 +19,8 @@ def leap2pose(position, direction, palm_normal=None):
 
     """
     if palm_normal is not None:
-        roll = - palm_normal.roll
-        pitch = - direction.pitch
+        roll = - 2.5*palm_normal.roll
+        pitch = - 2*direction.pitch
         yaw = - direction.yaw
     else:
         roll = - direction.roll
@@ -94,7 +94,7 @@ def leap_node():
             tools_msg.width = tool.width
             msg.tools.append(tools_msg)
         pub.publish(msg)
-        rospy.sleep(0.01)
+        rospy.sleep(0.05)
 
 
 if __name__ == '__main__':
