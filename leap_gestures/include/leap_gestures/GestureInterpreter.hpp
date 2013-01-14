@@ -19,7 +19,7 @@ public:
 		_nh(nh)
 	{
 		_handEnteredWorkspaceTimestamp = ros::Time(0);
-		resetControl();
+		initControl();
 
 		double temp;
 
@@ -30,7 +30,11 @@ public:
 
 		nhPriv.param<double>("controller_radius", _workspaceHandRadius, 0.2);
 		nhPriv.param<double>("controller_inner_radius", _workspaceHandInnerRadius, 0.03);
+		nhPriv.param<bool>("gripper_control_enabled", _gripperControlEnabled, true);
 		nhPriv.param<double>("gripper_control_threshold", _gripperControlThreshold, 0.06);
+		nhPriv.param<bool>("square_workspace", _squareWorkspace, false);
+		nhPriv.param<bool>("reset_to_zero", _resetToZero, true);
+
 
 		nhPriv.param<double>("workspace_origin/x", temp, 0);
 		_workspaceHand.setX(temp);
@@ -147,10 +151,19 @@ public:
 		_workspaceHandActive = active;
 	}
 
-	void resetControl()
+	void initControl()
 	{
 		_controlHandPose = geometry_msgs::Pose();
 		_controlHandPose.orientation.w = 1;
+	}
+
+	void resetControl()
+	{
+		if(_resetToZero)
+		{
+			_controlHandPose = geometry_msgs::Pose();
+			_controlHandPose.orientation.w = 1;
+		}
 	}
 
 	void frameHasHand()
@@ -186,8 +199,21 @@ public:
 	{
 		tf::Point hand_point;
 		tf::pointMsgToTF(hand.pose.position, hand_point);
-		ROS_INFO_STREAM((hand_point - _workspaceHand).length());
-		return (hand_point - _workspaceHand).length() < _workspaceHandRadius;
+		tf::Point relative_hand_point = hand_point - _workspaceHand;
+		ROS_DEBUG_STREAM(relative_hand_point.length());
+		if(_squareWorkspace)
+		{
+			// square workspace
+			return (fabs(relative_hand_point.x()) < _workspaceHandRadius) &&
+					(fabs(relative_hand_point.y()) < _workspaceHandRadius) &&
+					(fabs(relative_hand_point.z()) < _workspaceHandRadius);
+
+		}
+		else
+		{
+			// sperical workspace
+			return relative_hand_point.length() < _workspaceHandRadius;
+		}
 	}
 
 	void run()
@@ -211,7 +237,7 @@ public:
 				_pubStatus.publish(msg);
 			}
 
-			if(_workspaceHandActive)
+			if(_workspaceHandActive && _gripperControlEnabled)
 			{
 				_pubControlGripper.publish(_gripperControl);
 			}
@@ -240,6 +266,9 @@ private:
 	leap_msgs::GripperControl _gripperControl;
 
 	double _gripperControlThreshold;
+	bool _squareWorkspace;
+	bool _resetToZero;
+	bool _gripperControlEnabled;
 
 	// zero if last frame had no hand in workspace
 	ros::Time _handEnteredWorkspaceTimestamp;
