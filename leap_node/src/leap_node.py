@@ -8,7 +8,7 @@ import Leap, sys
 from math import cos, sin
 
 
-def leap2pose(position, direction, palm_normal=None, angle_scaling=[1 1 1]):
+def leap2pose(position, direction, palm_normal=None, rpy_scaling=[1, 1, 1]):
     """
     Converts LEAP position in mm and direction into ROS poses in meters.
 
@@ -16,18 +16,18 @@ def leap2pose(position, direction, palm_normal=None, angle_scaling=[1 1 1]):
         position:       Leap.Vector of leap position
         direction:      Leap.Vector of leap direction
         palm_normal:    Leap.Vector of leap palm_normal (defaults: None)
-        angle_scaling:  Vector of 3 floats defining a scaling of the
+        rpy_scaling:  Vector of 3 floats defining a scaling of the
                         roll pitch and yaw anlge used for PR2 control
-                        defaults to [1 1 1]
+                        defaults to [1, 1, 1]
 
     Returns: 
         pose_msg: geometry_msgs/Pose
 
     """
     if palm_normal is not None:
-        roll = - angle_scaling[0] * palm_normal.roll
-        pitch = - angle_scaling[1] * direction.pitch
-        yaw = - angle_scaling[2] * direction.yaw
+        roll = - rpy_scaling[0] * palm_normal.roll
+        pitch = - rpy_scaling[1] * direction.pitch
+        yaw = - rpy_scaling[2] * direction.yaw
     else:
         roll = - direction.roll
         pitch = - direction.pitch
@@ -51,7 +51,7 @@ def leapvec2point(vector):
         vector: Leap.Vector of e.g. a velocity in [mm/s]
 
     Returns: 
-        pos_msg: geometry_msgs/Pos
+        point_msg: geometry_msgs/Pos
 
     """
     point_msg = Point()
@@ -59,7 +59,7 @@ def leapvec2point(vector):
     point_msg.y = -vector.x / 1000
     point_msg.z = vector.y / 1000
 
-    return vel_msg
+    return point_msg
 
 
 def leap_node():
@@ -107,7 +107,7 @@ def leap_node():
         for tool_iter, tool in enumerate(frame.tools):
             tools_msg = Tool()
             tools_msg.pose = leap2pose(tool.tip_position, tool.direction)
-            tools_msg.velocity = leap2vel(tool.tip_velocity)
+            tools_msg.velocity = leapvec2point(tool.tip_velocity)
             tools_msg.length = tool.length
             tools_msg.width = tool.width
             msg.tools.append(tools_msg)
