@@ -48,6 +48,15 @@ public:
 		ROS_INFO_STREAM("Gesture Interpreter config: reset_to_zero = " << _resetToZero);
 
 
+		nhPriv.param<double>("scale_roll", _scaleRoll, 2.5);
+		ROS_INFO_STREAM("Gesture Interpreter config: scale_roll = " << _scaleRoll);
+		nhPriv.param<double>("scale_pitch", _scalePitch, 2.0);
+		ROS_INFO_STREAM("Gesture Interpreter config: scale_pitch = " << _scalePitch);
+		nhPriv.param<double>("scale_yaw", _scaleYaw, 1.0);
+		ROS_INFO_STREAM("Gesture Interpreter config: scale_yaw = " << _scaleYaw);
+
+
+
 		nhPriv.param<double>("workspace_origin/x", temp, 0);
 		_workspaceHand.setX(temp);
 		nhPriv.param<double>("workspace_origin/y", temp, 0);
@@ -88,6 +97,17 @@ public:
 					///////////////////////////////////
 					tf::Point hand_point;
 					tf::pointMsgToTF(hand.pose.position, hand_point);
+					tf::Quaternion hand_orientation;
+					tf::quaternionMsgToTF(hand.pose.orientation, hand_orientation);
+
+					double roll, pitch, yaw;
+					tf::Matrix3x3(hand_orientation).getEulerYPR(yaw, pitch, roll);
+					roll *= _scaleRoll;
+					pitch *= _scalePitch;
+					yaw *= _scaleYaw;
+					tf::Matrix3x3 oriMat;
+					oriMat.setEulerYPR(yaw, pitch, roll);
+					oriMat.getRotation(hand_orientation);
 
 					tf::Point relative_hand_point = hand_point - _workspaceHand;
 
@@ -299,6 +319,9 @@ private:
 	// zero if last frame had no hand in workspace
 	ros::Time _handEnteredWorkspaceTimestamp;
 
+	double _scaleRoll;
+	double _scalePitch;
+	double _scaleYaw;
 
 	ros::Duration _waitBeforeHandActive;
 };

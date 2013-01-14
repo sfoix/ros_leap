@@ -4,6 +4,10 @@
         
 	<param name="wait_before_hand_active" value="0.5"/>
 	
+	<param name="scale_roll" value="2.5"/>
+	<param name="scale_pitch" value="2.0"/>
+	<param name="scale_yaw" value="1.0"/>
+	
 	<param name="workspace_origin/x" value="0"/>
 	<param name="workspace_origin/y" value="0"/>
 	<param name="workspace_origin/z" value="0.3"/>
