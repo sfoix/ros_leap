@@ -19,6 +19,9 @@
   <node pkg="pr2_teleop_leap" type="pose_control_node.py" name="pose_control_node"
         output="screen"/>
 
+  <node pkg="pr2_teleop_leap" type="gripper_node" name="gripper_node" />
+
+
   <include file="$(find simple_robot_control)/launch/simple_robot_control_without_collision_checking.launch"/>
 
 </launch>
