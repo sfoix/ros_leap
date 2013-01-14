@@ -7,21 +7,27 @@ from geometry_msgs.msg import Pose, Point
 import Leap, sys
 from math import cos, sin
 
-def leap2pose(position, direction, palm_normal=None):
+
+def leap2pose(position, direction, palm_normal=None, angle_scaling=[1 1 1]):
     """
+    Converts LEAP position in mm and direction into ROS poses in meters.
+
     Args: 
-        position:  Leap.Vector of leap position
-        direction: Leap.Vector of leap direction
-        palm_normal: Leap.Vector of leap palm_normal (defaults: None)
+        position:       Leap.Vector of leap position
+        direction:      Leap.Vector of leap direction
+        palm_normal:    Leap.Vector of leap palm_normal (defaults: None)
+        angle_scaling:  Vector of 3 floats defining a scaling of the
+                        roll pitch and yaw anlge used for PR2 control
+                        defaults to [1 1 1]
 
     Returns: 
         pose_msg: geometry_msgs/Pose
 
     """
     if palm_normal is not None:
-        roll = - palm_normal.roll
-        pitch = - direction.pitch
-        yaw = - direction.yaw
+        roll = - angle_scaling[0] * palm_normal.roll
+        pitch = - angle_scaling[1] * direction.pitch
+        yaw = - angle_scaling[2] * direction.yaw
     else:
         roll = - direction.roll
         pitch = - direction.pitch
@@ -36,27 +42,34 @@ def leap2pose(position, direction, palm_normal=None):
     pose_msg.orientation.z = cos(roll/2) * cos(pitch/2) * sin(yaw/2) - sin(roll/2) * sin(pitch/2) * cos(yaw/2)
     return pose_msg
 
-def leap2vel(velocity):
+
+def leapvec2point(vector):
     """
+    Converts Leap vectors in mm into ros points in m.
+
     Args: 
-        velocity:  Leap.Vector of leap velocity
+        vector: Leap.Vector of e.g. a velocity in [mm/s]
 
     Returns: 
         pos_msg: geometry_msgs/Pos
 
     """
-    pos_msg = Point()
-    pos_msg.x = -velocity.z / 1000
-    pos_msg.y = -velocity.x / 1000
-    pos_msg.z = velocity.y / 1000
+    point_msg = Point()
+    point_msg.x = -vector.z / 1000
+    point_msg.y = -vector.x / 1000
+    point_msg.z = vector.y / 1000
 
-    return pos_msg
+    return vel_msg
+
 
 def leap_node():
     """
     Publishes LEAP data to ROS
     """
     rospy.init_node('leap')
+    roll_scale = rospy.get_param('roll_scale', 1)
+    pitch_scale = rospy.get_param('pitch_scale', 1)
+    yaw_scale = rospy.get_param('yaw_scale', 1)
     pub = rospy.Publisher('leap/data', Leap_msg)
     controller = Leap.Controller()
     while not rospy.is_shutdown():
@@ -75,14 +88,19 @@ def leap_node():
         for hand_iter, hand in enumerate(frame.hands):
             hand_msg = Hand()
             hand_msg.id = hand.id
-            hand_msg.pose = leap2pose(hand.palm_position, hand.direction, hand.palm_normal)
+            hand_msg.pose = leap2pose(
+                position=hand.palm_position,
+                direction=hand.direction,
+                palm_normal=hand.palm_normal,
+                rpy_scaling=[roll_scale, pitch_scale, yaw_scale]
+            )
             hand_msg.finger_ids = [finger.id for finger in hand.fingers]
             hand_msg.tool_ids = [tool.id for tool in hand.tools]
             msg.hands.append(hand_msg)
         for finger_iter, finger in enumerate(frame.fingers):
             finger_msg = Finger()
             finger_msg.pose = leap2pose(finger.tip_position, finger.direction)
-            finger_msg.velocity = leap2vel(finger.tip_velocity)
+            finger_msg.velocity = leapvec2point(finger.tip_velocity)
             finger_msg.length = finger.length
             finger_msg.width = finger.width
             msg.fingers.append(finger_msg)
