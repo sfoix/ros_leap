@@ -1,0 +1,18 @@
+<launch>
+  <node pkg="leap_gestures" type="leap_gesture_interpreter" name="leap_gesture_interpreter"
+        output="screen">
+	<param name="wait_before_hand_active" value="0.5"/>
+	<param name="workspace_origin/x" value="0"/>
+	<param name="workspace_origin/y" value="0"/>
+	<param name="workspace_origin/z" value="0.3"/>
+	<param name="workspace_radius" value="0.2"/>
+	<!-- inner radius defines region where we always send 0 position -->
+	<param name="workspace_inner_radius" value="0.0"/>
+
+	<param name="square_workspace" value="true"/> <!-- false = sperical -->
+	<param name="reset_to_zero" value="false"/> <!-- false = if we loose tracking, don't return to 0 pose -->
+
+	<param name="gripper_control_threshold" value="0.06"/>
+	<param name="gripper_control_enabled" value="false"/>
+  </node>
+</launch>
