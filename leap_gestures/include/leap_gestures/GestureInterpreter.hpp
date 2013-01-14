@@ -118,7 +118,7 @@ public:
 					}
 
 					tf::pointTFToMsg(relative_hand_point, _controlHandPose.position);
-					_controlHandPose.orientation = hand.pose.orientation;
+					tf::quaternionTFToMsg(hand_orientation, _controlHandPose.orientation);
 
 					///////////////////////////////////
 					// Check fingers for gripper control
@@ -150,7 +150,7 @@ public:
 										poseFingerInHandFrame.getOrigin().getZ() << ", " <<
 										_gripperControlThreshold);
 
-						ROS_INFO_STREAM("control value: " << fabs((poseFinger.getOrigin() - poseHand.getOrigin()).getY()));
+//						ROS_INFO_STREAM("control value: " << fabs((poseFinger.getOrigin() - poseHand.getOrigin()).getY()));
 
 						if(fabs(poseFingerInHandFrame.getOrigin().getY()) > _gripperControlThreshold)
 						//if(fabs((poseFinger.getOrigin() - poseHand.getOrigin()).getY()) > _gripperControlThreshold)
@@ -167,12 +167,12 @@ public:
 #endif
 					if(hand.finger_ids.size() >= 3)
 					{
-						ROS_INFO("Open");
+//						ROS_INFO("Open");
 						_gripperControl.open = true;
 					}
 					else
 					{
-						ROS_INFO("Close");
+//						ROS_INFO("Close");
 						_gripperControl.open = false;
 					}
 

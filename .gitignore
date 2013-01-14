@@ -4,4 +4,7 @@ msg_gen
 .project
 .pydevproject
 cmake_install.cmake
+*~
+*.pyc
+
 

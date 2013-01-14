@@ -14,6 +14,13 @@
 
 	<param name="gripper_control_threshold" value="0.06"/>
 	<param name="gripper_control_enabled" value="true"/>
+
+        
+	<!-- SCALING NOT WORKING -->
+	<!--<param name="scale_roll" value="2.5"/>-->
+        <!--<param name="scale_pitch" value="2.0"/>-->
+        <!--<param name="scale_yaw" value="1.0"/>-->
+
   </node>
 
   <node pkg="pr2_teleop_leap" type="pose_control_node.py" name="pose_control_node"
