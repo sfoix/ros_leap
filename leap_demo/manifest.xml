@@ -1,0 +1,14 @@
+<package>
+  <description brief="leap_demo">
+
+     leap_demo
+
+  </description>
+  <author>Nikolaus Demmel</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/leap_demo</url>
+
+</package>
+
+
