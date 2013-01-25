@@ -67,9 +67,9 @@ def leap_node():
     Publishes LEAP data to ROS
     """
     rospy.init_node('leap')
-    roll_scale = rospy.get_param('roll_scale', 1)
-    pitch_scale = rospy.get_param('pitch_scale', 1)
-    yaw_scale = rospy.get_param('yaw_scale', 1)
+    roll_scale = rospy.get_param('~roll_scale', 1)
+    pitch_scale = rospy.get_param('~pitch_scale', 1)
+    yaw_scale = rospy.get_param('~yaw_scale', 1)
     pub = rospy.Publisher('leap/data', Leap_msg)
     controller = Leap.Controller()
     while not rospy.is_shutdown():
