@@ -56,7 +56,6 @@ public:
 		ROS_INFO_STREAM("Gesture Interpreter config: scale_yaw = " << _scaleYaw);
 
 
-
 		nhPriv.param<double>("workspace_origin/x", temp, 0);
 		_workspaceHand.setX(temp);
 		nhPriv.param<double>("workspace_origin/y", temp, 0);
@@ -65,6 +64,19 @@ public:
 		_workspaceHand.setZ(temp);
 		ROS_INFO("Gesture Interpreter config: workspace_origin = (%f,%f,%f)",
 				 _workspaceHand.x(), _workspaceHand.y(), _workspaceHand.z());
+
+		nhPriv.param<bool>("invert_x", _invertX, false);
+		ROS_INFO_STREAM("Gesture Interpreter config: invert_x = " << _invertX);
+		nhPriv.param<bool>("invert_y", _invertY, false);
+		ROS_INFO_STREAM("Gesture Interpreter config: invert_x = " << _invertY);
+		nhPriv.param<bool>("invert_z", _invertZ, false);
+		ROS_INFO_STREAM("Gesture Interpreter config: invert_x = " << _invertZ);
+		nhPriv.param<bool>("invert_roll", _invertRoll, false);
+		ROS_INFO_STREAM("Gesture Interpreter config: invert_x = " << _invertRoll);
+		nhPriv.param<bool>("invert_pitch", _invertPitch, false);
+		ROS_INFO_STREAM("Gesture Interpreter config: invert_x = " << _invertPitch);
+		nhPriv.param<bool>("invert_yaw", _invertYaw, false);
+		ROS_INFO_STREAM("Gesture Interpreter config: invert_x = " << _invertYaw);
 
 		_subLeap = _nh.subscribe("leap/data", 10, &GestureInterpreter::leapCB, this);
 		_pubControlHand = _nh.advertise<geometry_msgs::PoseStamped>("leap/palm/pose", 1, true);
@@ -96,6 +108,10 @@ public:
 					// Extract Hand Position
 					///////////////////////////////////
 					tf::Point hand_point;
+					// invert x/y/z before converting to TF
+					if(_invertX) hand.pose.position.x*=-1;
+					if(_invertY) hand.pose.position.y*=-1;
+					if(_invertZ) hand.pose.position.z*=-1;
 					tf::pointMsgToTF(hand.pose.position, hand_point);
 					tf::Quaternion hand_orientation;
 					tf::quaternionMsgToTF(hand.pose.orientation, hand_orientation);
@@ -107,6 +123,12 @@ public:
 					roll *= _scaleRoll ;
 					pitch *= _scalePitch;
 					yaw *= _scaleYaw;
+
+					// invert roll/pitch/yaw if requested by parameters
+					if(_invertRoll) roll*=-1;
+					if(_invertPitch) pitch*=-1;
+					if(_invertYaw) yaw*=-1;
+					
 					tf::Matrix3x3 oriMat;
 					oriMat.setEulerYPR(yaw, pitch, roll);
 					oriMat.getRotation(hand_orientation);
@@ -327,6 +349,13 @@ private:
 	double _scaleRoll;
 	double _scalePitch;
 	double _scaleYaw;
+
+	bool _invertX;
+	bool _invertY;
+	bool _invertZ;
+	bool _invertRoll;
+	bool _invertPitch;
+	bool _invertYaw;
 
 	ros::Duration _waitBeforeHandActive;
 };
