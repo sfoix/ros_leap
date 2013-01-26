@@ -108,10 +108,6 @@ public:
 					// Extract Hand Position
 					///////////////////////////////////
 					tf::Point hand_point;
-					// invert x/y/z before converting to TF
-					if(_invertX) hand.pose.position.x*=-1;
-					if(_invertY) hand.pose.position.y*=-1;
-					if(_invertZ) hand.pose.position.z*=-1;
 					tf::pointMsgToTF(hand.pose.position, hand_point);
 					tf::Quaternion hand_orientation;
 					tf::quaternionMsgToTF(hand.pose.orientation, hand_orientation);
@@ -129,6 +125,11 @@ public:
 					if(_invertPitch) pitch*=-1;
 					if(_invertYaw) yaw*=-1;
 					
+					// invert x/y/z if requested by parameters
+					if(_invertX) hand_point[0]*=-1;
+                                        if(_invertY) hand_point[1]*=-1;
+                                        if(_invertZ) hand_point[2]*=-1;
+
 					tf::Matrix3x3 oriMat;
 					oriMat.setEulerYPR(yaw, pitch, roll);
 					oriMat.getRotation(hand_orientation);
