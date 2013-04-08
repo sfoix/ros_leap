@@ -13,7 +13,7 @@ pub_marker2 = rospy.Publisher('/leap/pr2hand/workspace', Marker)
 
 rospy.init_node('leap_pose_control')
 armr = simple_robot_control.Arm('r')
-multiplier = 1.8
+multiplier = 1.4
 offset = [0.553, 0.013, 1.0]
 
 def callback(msg):
