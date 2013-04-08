@@ -17,12 +17,18 @@ multiplier = 1.8
 offset = [0.553, 0.013, 1.0]
 
 def callback(msg):
-	#ospy.loginfo("I received a message! w00t")
 	x = (msg.pose.position.x * multiplier) + 0.55
 	y = msg.pose.position.y * multiplier - 0.2
 	z = msg.pose.position.z * multiplier + 0.05
-	#armr = simple_robot_control.Arm('r')
-	armr.goToPose([x,y,z],[msg.pose.orientation.x,msg.pose.orientation.y,msg.pose.orientation.z,msg.pose.orientation.w ], 'torso_lift_link', 0.5,False)
+
+	dx = x - x_old
+	dy = y - y_old
+	dz = z - z_old
+	distance = sqrt(dx^2 + dy^2 + dz^2)
+	trajectory_duration = distance / 0.2 # make it move with a constant velocity dt=ds/v
+	trajectory_duration = trajectory_duration + 0.1 # make sure duration is not too small to compute
+
+	armr.goToPose([x,y,z],[msg.pose.orientation.x,msg.pose.orientation.y,msg.pose.orientation.z,msg.pose.orientation.w ], 'torso_lift_link', trajectory_duration, False)
 	marker = Marker()
         marker.header.frame_id = "base_link"
         marker.header.stamp = rospy.Time.now()
@@ -69,7 +75,9 @@ def callback(msg):
         marker2.color.b = 1.0
         pub_marker2.publish( marker2 )
 
-
+	x_old = x
+	y_old = y
+	z_old = z
 
 def PalmPose():
    #rospy.init_node('leap_pose_control')
