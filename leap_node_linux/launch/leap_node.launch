@@ -1,0 +1,11 @@
+<launch>
+
+  <node pkg="leap_node_linux" type="leap_node.py" name="leap_node"
+        output="screen">
+	<param name="roll_scale" value="2.5"/>
+	<param name="pitch_scale" value="2.0"/>
+	<param name="yaw_scale" value="1.0"/>
+
+  </node>
+
+</launch>
