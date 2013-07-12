@@ -8,7 +8,8 @@ GeneralCommander *gc;
 void chatterCallback(const geometry_msgs::TwistConstPtr& msg)
 {
   //ROS_INFO("linear x:%f y:%f z:%f wrist:%f ", msg->linear.x, msg->linear.y, msg->linear.z, msg->angular.x);
-  gc->sendArmVelCommands(msg->linear.x, msg->linear.y, msg->linear.z, msg->angular.x,0.0,0.0,0.0, 0.0, 20);
+  gc->sendArmVelCommands(msg->linear.x, msg->linear.y, msg->linear.z, msg->angular.x,0.0,
+			 0.0, 0.0, 0.0, 0.0, 0.0, 20);
 
 }
 

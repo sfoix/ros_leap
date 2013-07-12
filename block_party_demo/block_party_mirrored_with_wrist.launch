@@ -19,7 +19,9 @@
 	<param name="gripper_control_enabled" value="true"/>
 
    	<param name="invert_x" value="false"/>
-	<param name="invert_y" value="true"/>
+
+
+	<param name="invert_y" value="false"/>
 	<param name="invert_z" value="false"/>
 	<param name="invert_roll" value="true"/>
 	<param name="invert_pitch" value="false"/>
