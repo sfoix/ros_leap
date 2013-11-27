@@ -1,11 +1,13 @@
 #!/usr/bin/env python
-import roslib; roslib.load_manifest('leap_node_linux')
+
+import sys
+from math import cos, sin
+
 import rospy
+import leap_node_linux.Leap as Leap
+from geometry_msgs.msg import Pose, Point
 from leap_msgs.msg import Leap as Leap_msg
 from leap_msgs.msg import Hand, Tool, Finger
-from geometry_msgs.msg import Pose, Point
-import Leap, sys
-from math import cos, sin
 
 
 def leap2pose(position, direction, palm_normal=None, rpy_scaling=[1, 1, 1]):
