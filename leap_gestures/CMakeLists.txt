@@ -108,7 +108,7 @@ add_executable(leap_gesture_interpreter src/leap_gesture_interpreter.cpp)
 
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes
-# add_dependencies(leap_gestures_node leap_gestures_generate_messages_cpp)
+add_dependencies(leap_gesture_interpreter leap_msgs_gencpp)
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(leap_gesture_interpreter
