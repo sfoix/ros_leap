@@ -26,7 +26,8 @@ def callback(msg):
 	if orientation:
 		armr.goToPose([x,y,z],[msg.pose.orientation.x,msg.pose.orientation.y,msg.pose.orientation.z,msg.pose.orientation.w ], 'torso_lift_link', 0.5,False)
 	else:
-		armr.goToPose([x,y,z],[0.0,0.0,0.0,1.0 ], 'torso_lift_link', 0.5, False)
+                armr.goToPose([x,y,z],[0.0,0.0,0.0,1.0 ], 'torso_lift_link', 0.5, False)
+
 	marker = Marker()
         marker.header.frame_id = "base_link"
         marker.header.stamp = rospy.Time.now()

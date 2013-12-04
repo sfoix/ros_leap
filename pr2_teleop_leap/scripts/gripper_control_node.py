@@ -7,8 +7,9 @@ from leap_msgs.msg import GripperControl
 
 class GripperController():
     def __init__(self):
-        self.sub = rospy.Subscriber("/leap/pr2_hand/gripper", GripperControl, self.callback, queue_size = 1)
+        # NB - order matters here, since callback uses gripper
         self.gripper = simple_robot_control.Gripper('r')
+        self.sub = rospy.Subscriber("/leap/pr2_hand/gripper", GripperControl, self.callback, queue_size = 1)
 
     def callback(self, msg):
         if msg.open:
