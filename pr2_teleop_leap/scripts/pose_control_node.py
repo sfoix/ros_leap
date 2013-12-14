@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-import roslib; roslib.load_manifest('pr2_teleop_leap')
 import rospy
 import simple_robot_control
 import geometry_msgs
@@ -12,11 +11,12 @@ pub_marker = rospy.Publisher('/leap/pr2hand/hand', Marker)
 pub_marker2 = rospy.Publisher('/leap/pr2hand/workspace', Marker)
 
 rospy.init_node('leap_pose_control')
+rospy.wait_for_service('compute_ik')
 armr = simple_robot_control.Arm('r')
 multiplier = 1.6
 offset = [0.553, 0.013, 1.0]
-seed_angles = [-0.97840476860406289, -0.19456832314024575, -2.2066032133465989, -1.0864773957716338, 12.333808797076806, -0.47422239872702321, -16.799966201473772]
 orientation = rospy.get_param("~orientation", False)
+seed_angles = [-0.97840476860406289, -0.19456832314024575, -2.2066032133465989, -1.0864773957716338, 12.333808797076806, -0.47422239872702321, -16.799966201473772]
 
 def callback(msg):
 	#ospy.loginfo("I received a message! w00t")
@@ -25,9 +25,10 @@ def callback(msg):
 	z = msg.pose.position.z * multiplier + 0.05
 	#armr = simple_robot_control.Arm('r')
 	if orientation:
-		armr.goToPose([x,y,z],[msg.pose.orientation.x,msg.pose.orientation.y,msg.pose.orientation.z,msg.pose.orientation.w ], 'torso_lift_link', 0.5,False, seed_angles)
+		armr.goToPose([x,y,z],[msg.pose.orientation.x,msg.pose.orientation.y,msg.pose.orientation.z,msg.pose.orientation.w ], 'torso_lift_link', 0.5, False)#, seed_angles)
 	else:
-		armr.goToPose([x,y,z],[0.0,0.0,0.0,1.0 ], 'torso_lift_link', 0.5, False, seed_angles)
+                armr.goToPose([x,y,z],[0.0,0.0,0.0,1.0 ], 'torso_lift_link', 0.5, False)#, seed_angles)
+
 	marker = Marker()
         marker.header.frame_id = "base_link"
         marker.header.stamp = rospy.Time.now()

@@ -19,9 +19,7 @@
 	<param name="gripper_control_enabled" value="true"/>
 
    	<param name="invert_x" value="false"/>
-
-
-	<param name="invert_y" value="false"/>
+	<param name="invert_y" value="true"/>
 	<param name="invert_z" value="false"/>
 	<param name="invert_roll" value="true"/>
 	<param name="invert_pitch" value="false"/>
@@ -38,13 +36,12 @@
 
   <node pkg="pr2_teleop_leap" type="pose_control_node.py" name="pose_control_node"
         output="screen">
-    <param name="orientation" value="true"/>
+    <param name="orientation" value="false"/>
   </node>
 
-  <node pkg="pr2_teleop_leap" type="gripper_node" name="gripper_node" />
+  <node pkg="pr2_teleop_leap" type="gripper_control_node.py" name="gripper_node" />
 
-
-  <include file="$(find simple_robot_control)/launch/simple_robot_control_without_collision_checking.launch"/>
+  <include file="$(find simple_robot_control)/launch/simple_robot_control.launch"/>
 
 
 </launch>

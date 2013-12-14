@@ -5,7 +5,7 @@
 	<param name="wait_before_hand_active" value="0.5"/>
 	<param name="workspace_origin/x" value="0"/>
 	<param name="workspace_origin/y" value="0"/>
-	<param name="workspace_origin/z" value="0.3"/>
+	<param name="workspace_origin/z" value="0.4"/>
 	<param name="workspace_radius" value="0.2"/>
 	<!-- inner radius defines region where we always send 0 position -->
 	<param name="workspace_inner_radius" value="0.0"/>
@@ -18,14 +18,13 @@
 
 	<param name="gripper_control_enabled" value="true"/>
 
-   	<param name="invert_x" value="false"/>
-	<param name="invert_y" value="true"/>
-	<param name="invert_z" value="false"/>
-	<param name="invert_roll" value="true"/>
-	<param name="invert_pitch" value="false"/>
-	<param name="invert_yaw" value="true"/>
-	
-
+    <param name="invert_x" value="false"/>
+    <param name="invert_y" value="false"/>
+    <param name="invert_z" value="false"/>
+    <param name="invert_roll" value="false"/>
+    <param name="invert_pitch" value="false"/>
+    <param name="invert_yaw" value="false"/>
+        
 	<!-- SCALING NOT WORKING -->
 	<!--<param name="scale_roll" value="2.5"/>-->
 	<!--<param name="scale_pitch" value="2.0"/>-->
@@ -39,10 +38,10 @@
     <param name="orientation" value="false"/>
   </node>
 
-  <node pkg="pr2_teleop_leap" type="gripper_node" name="gripper_node" />
+  <node pkg="pr2_teleop_leap" type="gripper_control_node.py" name="gripper_node" />
 
 
-  <include file="$(find simple_robot_control)/launch/simple_robot_control_without_collision_checking.launch"/>
+  <include file="$(find simple_robot_control)/launch/simple_robot_control.launch"/>
 
 
 </launch>
