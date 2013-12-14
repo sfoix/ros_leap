@@ -25,9 +25,9 @@ def callback(msg):
 	z = msg.pose.position.z * multiplier + 0.05
 	#armr = simple_robot_control.Arm('r')
 	if orientation:
-		armr.goToPose([x,y,z],[msg.pose.orientation.x,msg.pose.orientation.y,msg.pose.orientation.z,msg.pose.orientation.w ], 'torso_lift_link', 0.5,False, seed_angles)
+		armr.goToPose([x,y,z],[msg.pose.orientation.x,msg.pose.orientation.y,msg.pose.orientation.z,msg.pose.orientation.w ], 'torso_lift_link', 0.5, False)#, seed_angles)
 	else:
-                armr.goToPose([x,y,z],[0.0,0.0,0.0,1.0 ], 'torso_lift_link', 0.5, False, seed_angles)
+                armr.goToPose([x,y,z],[0.0,0.0,0.0,1.0 ], 'torso_lift_link', 0.5, False)#, seed_angles)
 
 	marker = Marker()
         marker.header.frame_id = "base_link"
