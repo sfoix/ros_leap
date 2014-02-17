@@ -295,7 +295,8 @@ public:
 
 	void run()
 	{
-		ros::Rate r(100);
+	  //		ros::Rate r(100);
+	  ros::Rate r(20);
 		while(ros::ok())
 		{
 			ros::spinOnce();
