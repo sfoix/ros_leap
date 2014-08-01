@@ -52,6 +52,7 @@ add_message_files(
   Hand.msg
   Leap.msg
   Tool.msg
+  Gesture.msg
 )
 
 ## Generate services in the 'srv' folder
